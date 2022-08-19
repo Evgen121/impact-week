@@ -1,0 +1,77 @@
+<%- include('components/header'); -%>
+    <nav id="nav-bar" class="navbar navbar-expand-lg navbar-dark bg-primary" style=" display:flex;
+    align-items: center;
+    justify-content: center;">
+        <% if (user){%>
+            <div class="nav1">
+                <a class="navbar-brand btn bg-secondary" href="https://matrixmaster.info" target="_blank">About Matrix Master</a>
+
+            </div>
+            <div class="nav">
+                <a href="/" class="btn bg-info">Back To Home</a>
+                <a href="/addquestions" class="btn btn-default bg-info">Add a questions <i class="fa fa-code"></i></a>
+
+                <a href="/logout" class="btn bg-info">Log out</a>
+            </div>
+            <% } else { %>
+
+                <a class="navbar-brand" href="https://matrixmaster.info" target="_blank">About Matrix Master</a>
+                <div class="nav">
+                    <a class="navbar-brand a-href" href="/login">Login</a>
+                    <a class="navbar-brand" href="/signup">SignUp</a>
+                </div>
+                <% } %>
+    </nav>
+    <div class="communityheader">
+
+        <h1 style="text-align: center;">
+            There are
+            <%= counts -1 %>
+                questions
+        </h1>
+
+
+
+    </div>
+    </div>
+
+    <% if(allquestions.length > 0) { %>
+        <div class="questionsbar">
+            <%  allquestions.forEach( questions => { %>
+
+                <div class="continer">
+
+                    <div class="col3">
+                        <a href="/communitydetails/?question_id=<%= questions._id %>" class="titlelink">
+                            <h2>
+                                <%= questions.title %>
+                            </h2>
+                        </a>
+                        <h3>
+                            <%= questions.text %>
+                        </h3>
+
+                    </div>
+                    <div class="col1">
+                        <p class="itemtxt"> Comments </p>
+                        <p class="itemtxt color2">
+                            <%= questions.comments.length %>
+                        </p>
+                        <p class="itemtxt"> Views </p>
+                        <p class="itemtxt color2">
+                            <%= questions.rate %>
+                        </p>
+                        <p style="margin-left: 30px; margin-top: 20px;">
+                            <%= new Intl.DateTimeFormat('en-GB', { dateStyle: 'short' ,
+                                    timeStyle: 'short' }).format(new Date(questions.created_at)) %>
+                        </p>
+                    </div>
+                </div>
+
+                <% }) %>
+        </div>
+        <% } else { %>
+            <h3 class="err"> No questions found </h3>
+            <% } %>
+
+                <%- include('components/footer'); -%>

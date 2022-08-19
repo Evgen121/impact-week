@@ -1,0 +1,136 @@
+<%- include('components/header'); -%>
+    <nav id="nav-bar" class="navbar navbar-expand-lg navbar-dark bg-primary " style=" display:flex;
+    align-items: center;
+    justify-content: center;">
+        <% if (user){%>
+            <div class="nav1">
+                <a href="https://matrixmaster.info" target="_blank">About Matrix Master</a>
+
+            </div>
+            <div class="nav">
+                <a href="/" class="btn bg-info" style=" margin-left: 50px;">Back To Home</a>
+                <a href="/community" class="btn bg-info" style=" margin-left: 50px;">Look all Questions </a>
+
+                <a href="/logout" class="btn bg-info" style=" margin-left: 50px;">Log out</a>
+            </div>
+            <% } else { %>
+
+                <a class="navbar-brand" href="https://matrixmaster.info" target="_blank">About Matrix Master</a>
+                <div class="nav">
+                    <a class="navbar-brand a-href" href="/login">Login</a>
+                    <a class="navbar-brand" href="/signup">SignUp</a>
+                </div>
+                <% } %>
+    </nav>
+    <div class="continer" style="text-align: center;
+    margin: 20px;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    border: 1px solid grey;
+    border-radius: 10px;">
+
+        <div class="col3">
+            <div class="continer">
+                <div class="col4">
+                    <h2>
+                        <%= questions.title %>
+                    </h2>
+                    <h2>
+                        <%= questions.text %>
+                    </h2>
+                </div>
+                <div class="col1" style="display: flex;  justify-content:center;   ">
+                    <p class="itemtxt"> Comments </p>
+                    <p class="itemtxt color1">
+                        <%= questions.comments.length %>
+                    </p>
+                    <p class="itemtxt" style="margin-left: 30px;"> Views </p>
+                    <p class="itemtxt color1">
+                        <%= questions.rate %>
+                    </p>
+
+
+                    <p style="margin-left: 30px;">
+                        <%= questions.user.username %> <span class="color1"> Asked </span> </p>
+                    <p style="margin-left: 30px;">
+                        <%= new Intl.DateTimeFormat('en-GB', { dateStyle: 'short' ,
+                                timeStyle: 'short' }).format(new Date(questions.created_at)) %>
+                    </p>
+
+                    <% if(questions.user._id.toString()===user._id.toString()) { %>
+                        <div class="continerfull" style="margin-bottom: 20px;margin-left: 30px; ">
+
+                            <button class="btn bg-info" style="margin-left: 30px;">   <a href="/edit-question/?questions_id=<%= questions._id %>" class="center btn-normal" alt="">Edit </button>
+
+                        </div>
+                        <div class="continerfull">
+                            <form onsubmit="return confirm('Are you sure?');" action="/delete-question?q_id=<%= questions._id %>" method="POST">
+                                <button class="btn bg-info" style="margin-left: 30px;">Delete </button>
+                            </form>
+
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="/add-comment/?questions_id=<%= questions._id %>&user_id=<%= user._id %>" method="POST" style="margin-left: 20px; ">
+        <div class="continer2">
+            <div class="col4">
+                <h3>Add Comment : </h2>
+                    <input type="text" placeholder="Write a comment" name="text" required />
+            </div>
+            <div class="col2" style="margin-top: 20px; margin-bottom: 20px">
+                <button class="btn bg-info">Add Comment </i></button>
+            </div>
+        </div>
+    </form>
+
+    <% if(questions.comments.length > 0) { %>
+        <ul class="questionsbar">
+            <%  questions.comments.forEach( comment => { %>
+
+                <div class="continerfull">
+                    <p>
+                        <%= comment.text %>
+                    </p>
+                </div>
+                <div class="continer">
+                    <div class="col2">
+                        <% if(user._id.toString()===comment.user_id.toString()) { %>
+                            <form onsubmit="return confirm('Are you sure?');" class="rightform" action="/delete-comment?comment_id=<%= comment._id %>&question_id=<%= questions._id %>" method="POST">
+                                <span> Avtor:  </span>
+                                <%= questions.user.username %>
+                                    <button class="center btn-normal bcolor1">Delete <i class="fa fa-trash-o"></i></button>
+                                    <% } %>
+                            </form>
+                            <div class="star-wrapper">
+
+                                <% for (var i =1; i <=5;  i++ ) { %>
+                                    <% if(comment.upvote >= i+1 ) { %>
+                                        <a href="/rate-comment?rate=<%= i %>&question_id=<%= questions._id %>&comment_id=<%= comment._id %>" class="fa fa-star basic s1" '></a>
+                            <% } else if(comment.upvote === 0 ){ %>
+                             <a href="/rate-comment?rate=<%= i %>&question_id=<%= questions._id %>&comment_id=<%= comment._id %>" class="fa fa-star basic s1 "'></a>
+                                        <% } else { %>
+                                            <a href="/rate-comment?rate=<%= i %>&question_id=<%= questions._id %>&comment_id=<%= comment._id %>" class="fa fa-star check s1 " '></a>
+                             <% } %>
+                               <% } %>
+                               
+                              </div>
+                            
+                           </div>
+                           
+                   
+                   </div>                  
+                   
+              </div>
+                
+                <% }) %>
+  </ul>
+               
+ 
+            <% } else { %>
+                <h3 class="txtdanger" style="margin-left: 20px;"> No comments for this question yet </h3>
+            <% } %>

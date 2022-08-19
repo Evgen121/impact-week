@@ -1,0 +1,51 @@
+<%- include('components/header'); -%>
+    <nav id="nav-bar" class="navbar navbar-expand-lg navbar-dark bg-primary" style=" display:flex;
+    align-items: center;
+    justify-content: center;">
+        <% if (user){%>
+            <div class="nav1">
+                <a class="navbar-brand btn bg-secondary" href="https://matrixmaster.info" target="_blank">About Matrix Master</a>
+
+            </div>
+            <div class="nav">
+                <a href="/" class="btn bg-info" style="margin-left: 20px;">Back To Home</a>
+                <a href="/community" class="btn bg-info" style="margin-left: 20px;">Look all Questions </a>
+                <a href="/logout" class="btn bg-info" style="margin-left: 20px;">Log out</a>
+            </div>
+            <% } else { %>
+
+                <a class="navbar-brand" href="https://matrixmaster.info" target="_blank">About Matrix Master</a>
+                <div class="nav">
+                    <a class="navbar-brand a-href" href="/login">Login</a>
+                    <a class="navbar-brand" href="/signup">SignUp</a>
+                </div>
+                <% } %>
+    </nav>
+    <h2 class="color1"> Edit Question </h2>
+    </hr>
+
+    <% if(formError) { %>
+        <h5 class="error">
+            <%= formError %>
+        </h5>
+        <% } %>
+            <div class="content">
+                <form action="/confirm_edit_q/?question_id=<%= question._id %>" method="POST">
+                    <h3>Title : </h2>
+                        <input type="text" placeholder="Title" name="title" value="<%= question.title %>" required />
+                        <h3>Description : </h2>
+                            <textarea name="text" rows="10" cols="100" />
+                            <%= question.text %>
+                                </textarea>
+                                <button class="bcolor2">Edit Question</button>
+                </form>
+            </div>
+            <footer class="footer mt-auto py-3 bg-primary" style="  position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 80px;">
+                <div class="container">
+                    <span class="text-light"><h2>Copyright © 2022 By Navjot Kaur & Yevhen</h2></span>
+                </div>
+            </footer>
